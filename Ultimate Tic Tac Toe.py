@@ -2,11 +2,11 @@
 #config
 obvious_small_wins = True	#Fills small boards with winning symbol.
 player_symbols = ["X", "O"]
-always_three_in_a_row = False	#Determines weather to always count 3 in a row as a win. Only applicible to games with more than 2 players. When false, board_side_length in a row is considered a win.
+always_three_in_a_row = False	#Determines weather to always count 3 in a row as a win. Only applicible to games with more than 2 players. When False, board_side_length in a row is considered a win.
 ##TODO: responsive board size for infinite players
 #setup
 import string
-board = []	#[0] is not visible, & represents the overall state of the board. [x][0] is also invisible & represents the overall state of board x.
+board = []	#[0] is not visible, & represents the overall state of the board. [x][0] is also invisible & is unused.
 board_side_length = len(player_symbols)+1
 board_length = (board_side_length**2)+1
 for a in range(board_length):	#Fill board with boards filled with spaces.
