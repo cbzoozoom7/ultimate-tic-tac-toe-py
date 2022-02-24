@@ -51,7 +51,7 @@ def handle_win(win_board_index):
 	return True
 def check_win(check_board_index):
 	global board, end
-	if always_three_in_a_row:
+	#if always_three_in_a_row:
 	for a in range(1, board_length-board_side_length+1, board_side_length):
 		if board[check_board_index][a] == board[check_board_index][a+1] == board[check_board_index][a+2] == player_symbols[current_turn]:
 			return handle_win(check_board_index)
