@@ -53,13 +53,12 @@ def check_win(check_board_index):
 	global board, end
 	#if always_three_in_a_row:
 	for a in range(1, board_length-board_side_length+1, board_side_length):
-		if board[check_board_index][a] == board[check_board_index][a+1] == board[check_board_index][a+2] == player_symbols[current_turn]:
+		if board[check_board_index][a] == board[check_board_index][a+1] == board[check_board_index][a+2] == player_symbols[current_turn]: #This code is trash because it only counts lines that start at the beginning of the row.
 			return handle_win(check_board_index)
-	for b in range(1, 4):
-		if board[check_board_index][b] == board[check_board_index][b+3] == board[check_board_index][b+6] == player_symbols[current_turn]:
-			handle_win(check_board_index)
-			return True
-	if ((board[check_board_index][1] == board[check_board_index][5] == board[check_board_index][9] == player_symbols[current_turn]) or (board[check_board_index][3] == board[check_board_index][5] == board[check_board_index][7] == player_symbols[current_turn])):
+	for b in range(1, board_side_length+1):
+		if board[check_board_index][b] == board[check_board_index][b+board_side_length] == board[check_board_index][b+board_side_length] == player_symbols[current_turn]:
+			return handle_win(check_board_index)
+	if ((board[check_board_index][1] == board[check_board_index][5] == board[check_board_index][9] == player_symbols[current_turn]) or (board[check_board_index][3] == board[check_board_index][5] == board[check_board_index][7] == player_symbols[current_turn])): #Indices of diagonals are board_side_length+1 or board_side_length-1 apart.
 		handle_win(check_board_index)
 		return True
 	check_full(check_board_index)
