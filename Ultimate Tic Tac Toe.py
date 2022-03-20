@@ -20,6 +20,24 @@ big_move = 0	#The player's input for the desired board to mark. Potentially non-
 small_move = 0	#The player's input for the desired cell to mark. Potentally non-numerical index.
 big_move_index = 0	#Numerical index equivilent of big_move.
 small_move_index = 0	#Numerical index of small_move.
+in_a_row_required = -1	#tells how many symbols in a row make a win
+if always_three_in_a_row:
+	in_a_row_required = 3
+else:
+	in_a_row_required = board_side_length
+diagonals = []
+for a in range(1, board_length - (in_a_row_required - 1) * board_side_length, board_side_length):
+	for b in range(0, in_a_row_required - 1):
+		new_diagonal = []
+		for c in range(a + b, board_length+1, board_side_length+1):
+			new_diagonal.append(c)
+		diagonals.append(new_diagonal)
+for a in range(board_length - (in_a_row_required - 1) * board_side_length, board_length + 1, board_side_length):
+	for b in range(in_a_row_required - 1, board_side_length):
+		new_diagonal = []
+		for c in range(a + b, board_length + 1, board_side_length - 1):
+			new_diagonal.append(c)
+		diagonals.append(new_diagonal)
 win_print = ""	#A status message telling the players that a board has been won, displayed after the completion of a turn, as necessary.
 end_print = ""	#A status message informing players of the final outcome of the game, displayed at the end of the game.
 print("Copyright CB, 2021\n\nThis is a turn-based strategy game in which each player has influence over their opponent's next turn. This game is known as Ultimate Tic Tac Toe because it is played on a large Tic Tac Toe board (a 3x3 grid) in which each cell of the board contains a smaller Tic Tac Toe board. The objective is to win three boards which form a line (horizontal, vertical, or diagonal). A board is won by marking three cells which form a line. As in regular Tic Tac Toe, both players take turns marking cells of the board. During the first turn, the player is free to mark any of the 81 cells. On most subsequent turns (including player 2's first turn), the player must mark the board that corresponds to the cell in which the previous mark was made. For example, if player 1 marked cell 7 of board 3, player 2 would be required to make their next mark in board 7. Both players are subject to this, so if player 2 then marked cell 2 (of board 7), player 1 is required to make the next mark in board 2. Neither player may mark a completed board (a board which is full or won by either player). If your opponent's previous mark requires you to do so, you must disregard that requirement & choose an incomplete board to mark.\n")
@@ -51,16 +69,41 @@ def handle_win(win_board_index):
 	return True
 def check_win(check_board_index):
 	global board, end
-	#if always_three_in_a_row:
-	for a in range(1, board_length-board_side_length+1, board_side_length):
-		if board[check_board_index][a] == board[check_board_index][a+1] == board[check_board_index][a+2] == player_symbols[current_turn]: #This code is trash because it only counts lines that start at the beginning of the row.
-			return handle_win(check_board_index)
-	for b in range(1, board_side_length+1):
-		if board[check_board_index][b] == board[check_board_index][b+board_side_length] == board[check_board_index][b+board_side_length] == player_symbols[current_turn]:
-			return handle_win(check_board_index)
-	if ((board[check_board_index][1] == board[check_board_index][5] == board[check_board_index][9] == player_symbols[current_turn]) or (board[check_board_index][3] == board[check_board_index][5] == board[check_board_index][7] == player_symbols[current_turn])): #Indices of diagonals are board_side_length+1 or board_side_length-1 apart.
-		handle_win(check_board_index)
-		return True
+	#This code is trash because it only counts lines that start at the beginning of the row.
+	#for a in range(1, board_length-board_side_length+1, board_side_length):
+		#if board[check_board_index][a] == board[check_board_index][a+1] == board[check_board_index][a+2] == player_symbols[current_turn]: 
+			#return handle_win(check_board_index)
+	#for b in range(1, board_side_length+1):
+		#if board[check_board_index][b] == board[check_board_index][b+board_side_length] == board[check_board_index][b+board_side_length] == player_symbols[current_turn]:
+			#return handle_win(check_board_index)
+	#if ((board[check_board_index][1] == board[check_board_index][5] == board[check_board_index][9] == player_symbols[current_turn]) or (board[check_board_index][3] == board[check_board_index][5] == board[check_board_index][7] == player_symbols[current_turn])): #Indices of diagonals are board_side_length+1 or board_side_length-1 apart.
+		#handle_win(check_board_index)
+		#return True
+#TODO: Test code below
+	#Test rows for win
+	for a in range(1, board_length-1, board_side_length): #Iterate through the indices of the first cell in each row
+		in_a_row_count = 0 #count how many symbols in a row
+		for b in board[check_board_index][a:a+board_side_length-1]: #iterate through each row
+			if b == player_symbols[current_turn]:
+				in_a_row_count+=1
+				if in_a_row_count == in_a_row_required:
+					return handle_win(check_board_index)
+	#test columns for win
+	for a in range(1, board_side_length+1):	#iterate through the indices of the first row
+		in_a_row_count = 0	#count how many symbols in a row
+		for b in range(a, board_length-1, board_side_length):
+			if board[check_board_index][b] == player_symbols[current_turn]:
+				in_a_row_count += 1
+				if in_a_row_count == in_a_row_required:
+					return handle_win(check_board_index)
+	#text diagonals for win
+	for a in diagonals:
+		in_a_row_count = 0
+		for b in a:
+			if board[check_board_index][b] == player_symbols[current_turn]:
+				in_a_row_count += 1
+				if in_a_row_count >= in_a_row_required:
+					return handle_win(check_board_index)
 	check_full(check_board_index)
 	return False
 def get_input(big_index, initial_prompt, illegal_reprompt):
