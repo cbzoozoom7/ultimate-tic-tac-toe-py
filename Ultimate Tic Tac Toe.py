@@ -27,15 +27,15 @@ else:
 	in_a_row_required = board_side_length
 diagonals = []
 for a in range(1, board_length - (in_a_row_required - 1) * board_side_length, board_side_length):
-	for b in range(0, in_a_row_required - 1):
+	for b in range(0, board_side_length - (in_a_row_required - 1)):
 		new_diagonal = []
-		for c in range(a + b, board_length+1, board_side_length+1):
+		for c in range(a + b, board_length, board_side_length + 1):
 			new_diagonal.append(c)
 		diagonals.append(new_diagonal)
-for a in range(board_length - (in_a_row_required - 1) * board_side_length, board_length + 1, board_side_length):
+for a in range(1, board_length - (in_a_row_required - 1) * board_side_length, board_side_length):
 	for b in range(in_a_row_required - 1, board_side_length):
 		new_diagonal = []
-		for c in range(a + b, board_length + 1, board_side_length - 1):
+		for c in range(a + b, board_length - 1, board_side_length - 1):
 			new_diagonal.append(c)
 		diagonals.append(new_diagonal)
 win_print = ""	#A status message telling the players that a board has been won, displayed after the completion of a turn, as necessary.
@@ -96,7 +96,7 @@ def check_win(check_board_index):
 				in_a_row_count += 1
 				if in_a_row_count == in_a_row_required:
 					return handle_win(check_board_index)
-	#text diagonals for win
+	#check diagonals for win
 	for a in diagonals:
 		in_a_row_count = 0
 		for b in a:
