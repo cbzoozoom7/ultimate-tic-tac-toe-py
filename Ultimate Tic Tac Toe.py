@@ -1,8 +1,8 @@
 #Copyright CB, 2021
 #config
 obvious_small_wins = True	#Fills small boards with winning symbol.
-player_symbols = ["X", "O"]
-always_three_in_a_row = False	#Determines weather to always count 3 in a row as a win. Only applicible to games with more than 2 players. When False, board_side_length in a row is considered a win.
+player_symbols = ['X', 'O', ' ']
+always_three_in_a_row = True	#Determines weather to always count 3 in a row as a win. Only applicible to games with more than 2 players. When False, board_side_length in a row is considered a win.
 ##TODO: responsive board size for infinite players
 #setup
 import string
@@ -31,12 +31,16 @@ for a in range(1, board_length - (in_a_row_required - 1) * board_side_length, bo
 		new_diagonal = []
 		for c in range(a + b, board_length, board_side_length + 1):
 			new_diagonal.append(c)
+			if len(new_diagonal) == in_a_row_required:
+				break
 		diagonals.append(new_diagonal)
 for a in range(1, board_length - (in_a_row_required - 1) * board_side_length, board_side_length):
 	for b in range(in_a_row_required - 1, board_side_length):
 		new_diagonal = []
 		for c in range(a + b, board_length - 1, board_side_length - 1):
 			new_diagonal.append(c)
+			if len(new_diagonal) == in_a_row_required:
+				break
 		diagonals.append(new_diagonal)
 win_print = ""	#A status message telling the players that a board has been won, displayed after the completion of a turn, as necessary.
 end_print = ""	#A status message informing players of the final outcome of the game, displayed at the end of the game.
